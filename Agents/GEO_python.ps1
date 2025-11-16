@@ -7,7 +7,7 @@ $pos = $geo.Position
 $lat = $pos.Location.Latitude
 $lon = $pos.Location.Longitude
 
-$timestamp = (Get-Date).ToString("dd-MM-yyyy HH:mm")  # FORMATO richiesto
+$timestamp = (Get-Date).ToString("dd-MM-yyyy HH:mm")
 
 $body = @{
     device = $env:COMPUTERNAME
@@ -17,9 +17,10 @@ $body = @{
 } | ConvertTo-Json
 
 Invoke-RestMethod `
-    -Uri "https://urielsg.a.pinggy.link/update_position" `
+    -Uri "https://<YOUR-URL-HERE>/update_position" `
     -Method POST `
     -Body $body `
     -ContentType "application/json"
 
 exit
+
