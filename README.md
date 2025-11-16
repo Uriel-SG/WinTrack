@@ -72,9 +72,52 @@ Since the PowerShell script remains in the background to send JSON, it is recomm
 
 ---
 
-## Notes
+## JSON Data
 
-- PyTracker is intended for legitimate internal use, e.g., monitoring company devices.  
+Positions are saved in `positions.json` in the following format:
+
+```json
+{
+  "DeviceName1": [
+    {
+      "lat": 41.890210,
+      "lon": 12.492231,
+      "timestamp": "15-11-2025 23:08"
+    }
+  ],
+  "DeviceName2": [
+    ...
+  ]
+}
+```
+
+---
+
+## Monitor PCs Outside Local Network
+
+By default, the Flask server runs on `localhost` (`127.0.0.1`) and is accessible only on the PC (or on the network) where it is running.  
+In order to monitor multiple PCs from different networks (e.g., outside your local LAN), you need to make the web interface **publicly reachable**.
+
+**Example with Pinggy:**
+
+1. Start the Flask server on your PC:
+    ```bash
+    python server.py
+    ```
+
+2. Use [Pinggy](https://pinggy.iok/) to create a public link to your local server. This exposes `http://localhost:5000` to the internet via a secure temporary URL.
+
+3. On the remote PCs, configure the PowerShell script to send the position to the **Pinggy public URL** (`https://<pinggy-url>/update_position`) instead of `http://localhost:5000/update_position`.  
+
+4. Now you can view all devices in real-time through the public link, while the server running on your PC collects and stores the location data.
+
+---
+
+## Important Notes
+
+- Exposing your server publicly should be done carefully; ***ensure the link is shared only with trusted users***.  
+- The Flask server must be running on your PC to collect positions. Pinggy only tunnels traffic; it does not replace the server.
+- WinTrack is intended for **legitimate internal use**, e.g., monitoring company devices.  
 - It does not collect personal data beyond device locations.  
 - The `positions.json` file can be initially reset with:
     ```json
