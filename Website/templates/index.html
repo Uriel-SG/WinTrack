@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>WinTrack</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_favicon.ico') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" id="logo">
+  </header>
+
+  <main>
+    <div id="map"></div>
+    <div class="controls">
+      <select id="deviceSelect"></select>
+      <button id="prev">⬅️ Indietro</button>
+      <button id="next">➡️ Avanti</button>
+      <button id="clear">🗑 Cancella Cronologia</button>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

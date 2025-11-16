@@ -1,0 +1,106 @@
+/* Font moderno */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Header */
+header {
+  background-color: #20314b;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 2em;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Logo */
+header img#logo {
+  height: 60px;  
+  width: 400px;  
+  vertical-align: middle; 
+  margin-right: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-radius: 8px;
+}
+
+
+/* Main */
+main {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Mappa */
+#map {
+  height: 600px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Controls */
+.controls {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Select */
+.controls select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  background-color: #fff;
+}
+
+/* Buttons */
+.controls button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+#prev, #next {
+  background-color: #1a5273;
+  color: #fff;
+}
+
+#clear {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.controls button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media(max-width: 600px){
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls button, .controls select {
+    width: 100%;
+  }
+}
