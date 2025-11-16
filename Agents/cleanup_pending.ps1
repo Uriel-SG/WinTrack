@@ -1,7 +1,5 @@
-# Nome del processo o parte del comando da cercare
-$scriptName = "GEO_python.ps1"
+$scriptName = "position.ps1"
 
-# Ottieni tutti i processi PowerShell
 $psProcesses = Get-Process powershell -ErrorAction SilentlyContinue
 
 foreach ($p in $psProcesses) {
@@ -12,6 +10,7 @@ foreach ($p in $psProcesses) {
             Stop-Process -Id $p.Id -Force
         }
     } catch {
-        # ignora eventuali errori
+        # ignorare eventuali errori
     }
 }
+
