@@ -1,1 +1,96 @@
 # WinTrack
+<img width="1713" height="318" alt="logo" src="https://github.com/user-attachments/assets/5b93d014-4db7-4d30-8914-73b03ec29f12" />
+
+**WinTrack** is a simple Windows PC location tracking tool in real-time, designed to monitor multiple Windows devices on an interactive map. The application is built in Python using Flask and Leaflet.js, and allows viewing the location history or clearing it easily.
+
+---
+
+## Main Features
+
+- Track Windows PC locations with automatic updates.
+- View historical positions with "Back" and "Forward" buttons.
+- Easily clear position history with a single click.
+- Modern and responsive web interface with interactive Leaflet.js map.
+- Supports multiple devices simultaneously.
+
+---
+
+## Tools Used
+
+- **Python 3.13** with **Flask** for the local server.
+- **Leaflet.js** for map visualization.
+- **HTML / CSS / JS** for the web interface.
+- **PowerShell** to send PC location data.
+- **VBScript (.vbs)** to run PowerShell scripts silently in the background.
+- **Task Scheduler** to automate periodic position updates.
+- Optional: **Pinggy** to expose the Flask server online easily.
+
+---
+
+## Installation and Running
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/Uriel-SG/WinTrack.git
+    cd WinTrack
+    ```
+
+2. Install Python dependencies:
+    ```bash
+    pip install flask
+    ```
+
+3. Make sure the "**Find My Device**" service is enabled in Windows.
+
+4. Start the Flask server:
+    ```bash
+    python server.py
+    ```
+
+5. Open the browser at:
+    ```
+    http://localhost:5000
+    ```
+
+---
+
+## Task Scheduler Configuration
+
+To automate sending the PC location, create a scheduled task that runs the `.bat` file.  
+The `.bat` file in turn executes the `.vbs` script silently in the background.
+
+- **Trigger**: at your preferred interval (e.g., every 30 minutes).  
+- **Action**: Run `tracker.bat`.  
+- **Option**: check "Run whether user is logged on or not".
+
+### PowerShell Process Cleanup
+
+Since the PowerShell script remains in the background to send JSON, it is recommended to schedule a **cleanup task**:
+
+- Create a separate scheduled task that runs `cleanup.bat` about **10 minutes after sending the location**.  
+- This frees any residual PowerShell processes and avoids memory accumulation.
+
+---
+
+## Notes
+
+- PyTracker is intended for legitimate internal use, e.g., monitoring company devices.  
+- It does not collect personal data beyond device locations.  
+- The `positions.json` file can be initially reset with:
+    ```json
+    {}
+    ```
+
+---
+
+## Screenshots
+
+<img width="1592" height="977" alt="screen" src="https://github.com/user-attachments/assets/5a811abe-9c98-4d34-a32a-d64524867bb8" />
+
+
+---
+
+**Author:** Uriel-SG  
+**License:** MIT
+
+
