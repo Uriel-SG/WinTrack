@@ -133,6 +133,13 @@ In order to monitor multiple PCs from different networks (e.g., outside your loc
 
 ---
 
+## Contributing
+
+*Feel free to fork this repository and submit pull requests!*
+*Whether it’s improving the UI, adding new features, or optimizing the scripts, all contributions are welcome.*
+
+---
+
 **Author:** Uriel-SG  
 **License:** MIT
 
