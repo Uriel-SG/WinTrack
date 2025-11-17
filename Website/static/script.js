@@ -56,7 +56,6 @@ async function loadPositions() {
       deviceSelect.value = Object.keys(positionsData)[0];
     }
 
-
     // aggiorna markers e mappa
     for (const device in positionsData) {
       updateMarker(device);
@@ -93,7 +92,7 @@ deviceSelect.addEventListener("change", () => {
   const pos = positionsData[device][deviceIndex[device]];
   map.setView([pos.lat, pos.lon], 15);
 
-  // 🔥 Forza l’apertura del popup subito
+  // Forza l’apertura del popup subito
   if (markers[device]) {
     markers[device].openPopup();
   }
@@ -127,3 +126,4 @@ clearBtn.addEventListener("click", async () => {
 // aggiorna ogni 3 secondi
 setInterval(loadPositions, 3000);
 loadPositions();
+
