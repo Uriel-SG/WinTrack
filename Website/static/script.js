@@ -33,14 +33,29 @@ async function loadPositions() {
       }
     }
 
-    // aggiorna select dei device
+    // salva il selezionato prima dell'aggiornamento
+    const previouslySelected = deviceSelect.value;
+
+    // ricrea la select mantenendo la selezione precedente
     deviceSelect.innerHTML = "";
     for (const device in positionsData) {
       const option = document.createElement("option");
       option.value = device;
       option.text = device;
+
+      // mantiene il selezionato
+      if (device === previouslySelected) {
+         option.selected = true;
+      }
+
       deviceSelect.appendChild(option);
+  }
+
+    // se il precedente non esiste più, seleziona il primo disponibile
+    if (!deviceSelect.value && Object.keys(positionsData).length > 0) {
+      deviceSelect.value = Object.keys(positionsData)[0];
     }
+
 
     // aggiorna markers e mappa
     for (const device in positionsData) {
@@ -77,6 +92,11 @@ deviceSelect.addEventListener("change", () => {
   updateMarker(device);
   const pos = positionsData[device][deviceIndex[device]];
   map.setView([pos.lat, pos.lon], 15);
+
+  // 🔥 Forza l’apertura del popup subito
+  if (markers[device]) {
+    markers[device].openPopup();
+  }
 });
 
 prevBtn.addEventListener("click", () => {
