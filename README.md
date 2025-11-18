@@ -52,11 +52,14 @@
     http://<server-ip>:5000
     ```
 
+
 ### Client-side: agent auto-installation
 
 1. Make sure the "**Find My Device**" service is enabled in Windows.
    
 2. Run `agent_installer.ps1` **with administrative privileges**.
+
+3. Set the correct URL in the `Invoke-RewtMethod` of `position.ps1`.
 
 ---
 
