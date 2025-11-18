@@ -59,7 +59,7 @@
    
 2. Run `agent_installer.ps1` **with administrative privileges**.
 
-3. Set the correct URL in the `Invoke-RewtMethod` of `position.ps1`.
+3. Set the correct URL for the `Invoke-RestMethod` of `position.ps1` when prompted.
 
 ---
 
