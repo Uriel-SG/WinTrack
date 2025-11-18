@@ -29,6 +29,8 @@
 
 ## Installation and Running
 
+### Server-side
+
 1. Clone the repository:
     ```bash
     git clone https://github.com/Uriel-SG/WinTrack.git
@@ -40,21 +42,27 @@
     pip install flask
     ```
 
-3. Make sure the "**Find My Device**" service is enabled in Windows.
-
-4. Start the Flask server:
+3. Start the Flask server:
     ```bash
     python server.py
     ```
 
-5. Open the browser at:
+4. Open the browser at:
     ```
-    http://localhost:5000
+    http://<server-ip>:5000
     ```
+
+### Client-side: agent auto-installation
+
+1. Make sure the "**Find My Device**" service is enabled in Windows.
+   
+2. Run `agent_installer.ps1` **with administrative privileges**.
 
 ---
 
-## Task Scheduler Configuration
+## Manuale Task Scheduler Configuration (optional)
+
+*If you do not want to run the automatic agent installation, you can proceed manually as follows:*
 
 To automate sending the PC location, create a scheduled task that runs the `.bat` file.  
 The `.bat` file in turn executes the `.vbs` script silently in the background.
@@ -95,7 +103,7 @@ Positions are saved in `positions.json` in the following format:
 
 ## Monitor PCs Outside Local Network
 
-By default, the Flask server runs on `localhost` (`127.0.0.1`) and is accessible only on the PC (or on the network) where it is running.  
+By default, the Flask server runs on `0.0.0.0` and is accessible only on the PC (or on the network) where it is running.  
 In order to monitor multiple PCs from different networks (e.g., outside your local LAN), you need to make the web interface **publicly reachable**.
 
 **Example with Pinggy:**
