@@ -1,2 +1,3 @@
 @echo off
-cscript //nologo cleanup.vbs
+cscript //nologo "C:\ProgramData\wintrack\cleanup.vbs"
+
