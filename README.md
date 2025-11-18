@@ -67,10 +67,12 @@
 
 *If you do not want to run the automatic agent installation, you can proceed manually as follows:*
 
+Set the correct URL in the `Invoke-RestMethod` field of `position.ps1`.
+
 To automate sending the PC location, create a scheduled task that runs the `.bat` file.  
 The `.bat` file in turn executes the `.vbs` script silently in the background.
 
-- **Trigger**: at your preferred interval (e.g., every 30 minutes).  
+- **Trigger**: at your preferred interval (e.g., every 10 minutes).  
 - **Action**: Run `tracker.bat`.  
 - **Option**: check "Run whether user is logged on or not".
 
@@ -78,7 +80,7 @@ The `.bat` file in turn executes the `.vbs` script silently in the background.
 
 Since the PowerShell script remains in the background to send JSON, it is recommended to schedule a **cleanup task**:
 
-- Create a separate scheduled task that runs `cleanup.bat` about **10 minutes after sending the location**.  
+- Create a separate scheduled task that runs `cleanup.bat` about **20 minutes after sending the location**.  
 - This frees any residual PowerShell processes and avoids memory accumulation.
 
 ---
