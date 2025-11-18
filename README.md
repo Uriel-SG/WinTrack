@@ -60,7 +60,7 @@
 
 ---
 
-## Manuale Task Scheduler Configuration (optional)
+## Manual Task Scheduler Configuration (optional)
 
 *If you do not want to run the automatic agent installation, you can proceed manually as follows:*
 
