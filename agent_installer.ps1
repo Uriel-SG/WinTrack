@@ -1,5 +1,5 @@
 # =====================================================================
-#  WinTrack – Installer Script
+#  WinTrack – Agent Installer Script
 #  Scarica la cartella "Agents" dalla repository GitHub
 #  Ne copia il contenuto in C:\Program\Data\wintrack
 #  Crea due Scheduled Tasks:
