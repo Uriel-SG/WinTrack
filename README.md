@@ -128,14 +128,11 @@ In order to monitor multiple PCs from different networks (e.g., outside your loc
 
 ## Important Notes
 
+- WinTrack is intended for **legitimate internal use**, e.g., monitoring company devices.
+- It does not collect personal data beyond device locations.
 - Exposing your server publicly should be done carefully; ***ensure the link is shared only with trusted users***.  
 - The Flask server must be running on your PC to collect positions. Pinggy only tunnels traffic; it does not replace the server.
-- WinTrack is intended for **legitimate internal use**, e.g., monitoring company devices.  
-- It does not collect personal data beyond device locations.  
-- The `positions.json` file can be initially reset with:
-    ```json
-    {}
-    ```
+- If you have an especially effective antivirus or antimalware solution, you may need to add the wintrack folder to the exceptions.  
 
 ---
 
