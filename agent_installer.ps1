@@ -66,7 +66,29 @@ Remove-Item -Path $tmp -Recurse -Force
 
 
 # -------------------------------
-# 6) Configura l'utilità di pianificazione
+# 6) Richiesta URL e modifica position.ps1
+# -------------------------------
+Write-Host "[*] Configurazione URL per position.ps1..."
+$customUrl = Read-Host "Inserisci l'URL completo (includi http:// o https://)"
+
+if ($customUrl -notmatch '^https?://') {
+    Write-Warning "!!! ATTENZIONE: L'URL deve iniziare con http:// o https://"
+    exit 1
+}
+
+$positionFile = Join-Path $dest "position.ps1"
+
+if (Test-Path $positionFile) {
+    Write-Host "[*] Aggiornamento del file position.ps1 con l'URL fornito..."
+    (Get-Content $positionFile) -replace '<YOUR-URL-HERE>', $customUrl | Set-Content $positionFile
+    Write-Host "[OK] URL aggiornato correttamente in position.ps1"
+} else {
+    Write-Warning "!!! ATTENZIONE: Il file position.ps1 non è stato trovato in $dest"
+}
+
+
+# -------------------------------
+# 7) Configura l'utilità di pianificazione
 # -------------------------------
 Write-Host "[*] Configurazione Utilità di Pianificazione..."
 
@@ -95,5 +117,4 @@ Write-Host ""
 Write-Host "[OK] Installazione completata!"
 Write-Host "[OK] Cartella WinTrack: $dest"
 Write-Host "[OK] Task creati: WinTrack-Tracker, WinTrack-Cleanup"
-Write-Host "[!] Ricordarsi di impostare l'URL corretto nell'Invoke-RestMethod di position.ps1"
 Write-Host ""
