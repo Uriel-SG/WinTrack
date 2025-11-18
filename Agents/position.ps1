@@ -17,10 +17,11 @@ $body = @{
 } | ConvertTo-Json
 
 Invoke-RestMethod `
-    -Uri "https://<YOUR-URL-HERE>/update_position" `
+    -Uri "<YOUR-URL-HERE>/update_position" `
     -Method POST `
     -Body $body `
     -ContentType "application/json"
 
 exit
+
 
