@@ -88,7 +88,23 @@ if (Test-Path $positionFile) {
 
 
 # -------------------------------
-# 7) Configura l'utilità di pianificazione
+# 7) Richiesta API KEY e impostazione variabile ambiente
+# -------------------------------
+Write-Host "[*] Configurazione API Key..."
+$apiKey = Read-Host "Inserisci la API Key fornita dall'amministratore"
+
+if ([string]::IsNullOrWhiteSpace($apiKey)) {
+    Write-Error "!!! ERRORE: API Key non valida."
+    exit 1
+}
+
+Write-Host "[*] Imposto variabile ambiente di sistema WINTRACK_API_KEY..."
+setx WINTRACK_API_KEY "$apiKey" /M | Out-Null
+
+Write-Host "[OK] API Key salvata come variabile ambiente di sistema."
+
+# -------------------------------
+# 8) Configura l'utilità di pianificazione
 # -------------------------------
 Write-Host "[*] Configurazione Utilità di Pianificazione..."
 
