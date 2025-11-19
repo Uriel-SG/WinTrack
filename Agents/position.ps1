@@ -22,10 +22,11 @@ Invoke-RestMethod `
     -Uri "<YOUR-URL-HERE>/update_position" `
     -Method POST `
     -Body $body `
-    -ContentType "application/json"
+    -ContentType "application/json" `
     -Headers @{ "X-API-Key" = $apiKey }
 
 exit
+
 
 
 
