@@ -9,6 +9,8 @@ $lon = $pos.Location.Longitude
 
 $timestamp = (Get-Date).ToString("dd-MM-yyyy HH:mm")
 
+$apiKey = $env:WINTRACK_API_KEY
+
 $body = @{
     device = $env:COMPUTERNAME
     lat = $lat
@@ -21,7 +23,9 @@ Invoke-RestMethod `
     -Method POST `
     -Body $body `
     -ContentType "application/json"
+    -Headers @{ "X-API-Key" = $apiKey }
 
 exit
+
 
 
