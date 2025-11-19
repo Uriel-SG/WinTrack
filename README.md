@@ -39,15 +39,26 @@
 
 2. Install Python dependencies:
     ```bash
-    pip install flask
+    pip install flask Flask-Limiter
     ```
 
-3. Start the Flask server:
+3. Create an API key for WinTrack as a System Variable:
+
+   *Windows:*
+    ```bash
+    setx WINTRACK_API_KEY "YOUR_API_KEY" /M
+     ```
+    *Linux:*
+    ```bash
+    sudo sh -c 'echo "export WINTRACK_API_KEY=YOUR_API_KEY" >> /etc/environment'
+     ```
+
+5. Start the Flask server:
     ```bash
     python server.py
     ```
 
-4. Open the browser at:
+6. Open the browser at:
     ```
     http://<server-ip>:5000
     ```
@@ -59,7 +70,7 @@
    
 2. Run `agent_installer.ps1` **with administrative privileges**.
 
-3. Set the correct URL for the `Invoke-RestMethod` of `position.ps1` when prompted.
+3. Set the correct URL for the `Invoke-RestMethod` of `position.ps1` and the chosen `API Key` when prompted.
 
 ---
 
@@ -68,6 +79,8 @@
 *If you do not want to run the automatic agent installation, you can proceed manually as follows:*
 
 Set the correct URL in the `Invoke-RestMethod` field of `position.ps1`.
+
+Set the system-wide API key on the endpoint with: `setx WINTRACK_API_KEY "YOUR_API_KEY" /M`
 
 To automate sending the PC location, create a scheduled task that runs the `.bat` file.  
 The `.bat` file in turn executes the `.vbs` script silently in the background.
@@ -123,6 +136,38 @@ In order to monitor multiple PCs from different networks (e.g., outside your loc
 3. On the remote PCs, configure the PowerShell script to send the position to the **Pinggy public URL** (`https://<pinggy-url>/update_position`) instead of `http://localhost:5000/update_position`.  
 
 4. Now you can view all devices in real-time through the public link, while the server running on your PC collects and stores the location data.
+
+---
+
+## Security Features
+
+### API Key Authentication
+All position updates sent to the server *must include a valid API key in the* `X-API-Key` HTTP header.
+
+**The server verifies this key before accepting or processing any incoming payload.**
+
+This mechanism ensures that:
+
+- Only authorized agents can submit geolocation data;
+
+- Unauthorized clients, scanners, or malicious scripts are immediately rejected;
+
+API keys can be rotated or revoked at any time without modifying the agent code.
+
+The API key is stored as a system environment variable (`WINTRACK_API_KEY`) on the server to avoid embedding secrets in the source code or repository.
+
+### Rate Limiting (DoS Protection)
+The server implements request rate limiting on critical endpoints using `Flask-Limiter`.
+
+Rate limiting provides:
+
+- Protection against brute-force or flood attacks.
+
+- Controlled access to high-frequency endpoints, such as /update_position.
+
+- Automatic throttling of clients that exceed predefined request thresholds.
+
+This helps maintain service **availability** and prevents malicious clients from overwhelming the server with excessive traffic.
 
 ---
 
