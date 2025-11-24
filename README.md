@@ -68,7 +68,10 @@
 
 1. Make sure the "**Find My Device**" service is enabled in Windows.
    
-2. Run `agent_installer.ps1` **with administrative privileges**.
+2. Run `agent_installer.ps1` **with administrative privileges** or, alternatively, run the following ***one‑liner*** as administrator, which will **automatically execute the installer script on the target host**:
+    ```
+    powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "iex (Invoke-WebRequest 'https://raw.githubusercontent.com/Uriel-SG/WinTrack/main/agent_installer.ps1' -UseBasicParsing).Content"
+    ```
 
 3. Set the correct URL for the `Invoke-RestMethod` of `position.ps1` and the chosen `API Key` when prompted.
 
