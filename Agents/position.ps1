@@ -7,6 +7,11 @@ $pos = $geo.Position
 $lat = $pos.Location.Latitude
 $lon = $pos.Location.Longitude
 
+# Controllo: se lat o lon non sono numeri validi, termina lo script
+if ([double]::IsNaN($lat) -or [double]::IsNaN($lon) -or $lat -eq 0 -or $lon -eq 0) {
+    exit
+}
+
 $timestamp = (Get-Date).ToString("dd-MM-yyyy HH:mm")
 
 $apiKey = $env:WINTRACK_API_KEY
@@ -26,6 +31,7 @@ Invoke-RestMethod `
     -Headers @{ "X-API-Key" = $apiKey }
 
 exit
+
 
 
 
