@@ -19,7 +19,7 @@ if not API_KEY:
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["50 per 10 minutes"]  # Limite globale
+    default_limits=[]  # Limite globale: lo azzeriamo, altrimenti dà problemi con le richieste GET - lasciamo il limiter sulle POST
 )
 
 def load_positions():
@@ -73,4 +73,5 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
+
 
