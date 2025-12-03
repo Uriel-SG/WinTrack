@@ -19,7 +19,7 @@ if not API_KEY:
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["50 per 10 minutes"]
+    default_limits=["50 per 10 minutes"]  # Limite globale
 )
 
 def load_positions():
@@ -31,17 +31,6 @@ def load_positions():
 def save_positions(data):
     with open(POSITIONS_FILE, "w") as f:
         json.dump(data, f, indent=2)
-
-def is_valid_coordinate(value):
-    '''
-    Verifica che la coordinata possa essere convertita in float.
-    Non le converte, perché dobbiamo salvarle come stringa.
-    '''
-    try:
-        float(value)
-        return True
-    except (ValueError, TypeError):
-        return False
 
 @app.route("/update_position", methods=["POST"])
 @limiter.limit("20 per minute")
@@ -62,17 +51,9 @@ def update_position():
     if device is None or lat is None or lon is None or timestamp is None:
         return jsonify({"error": "Missing fields"}), 400
 
-    # Validazione formattazione lat/lon
-    if not is_valid_coordinate(lat) or not is_valid_coordinate(lon):
-        return jsonify({"error": "Invalid coordinate format"}), 400
-
     positions = load_positions()
     positions.setdefault(device, [])
-    positions[device].append({
-        "lat": lat,  
-        "lon": lon,
-        "timestamp": timestamp
-    })
+    positions[device].append({"lat": lat, "lon": lon, "timestamp": timestamp})
     save_positions(positions)
 
     return jsonify({"status": "ok"}), 200
@@ -91,5 +72,5 @@ def index():
     return render_template("index.html"), 200
 
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
