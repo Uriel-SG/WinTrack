@@ -48,15 +48,31 @@ def update_position():
     lon = data.get("lon")
     timestamp = data.get("timestamp")
 
-    if device is None or lat is None or lon is None or timestamp is None:
+    # Controllo campi base
+    if device is None or timestamp is None:
         return jsonify({"error": "Missing fields"}), 400
 
+    # Validazione lat/lon (senza la quale l'app crashava)
+    try:
+        lat_f = float(lat)
+        lon_f = float(lon)
+
+        # Scarta NaN o infinito
+        if not (abs(lat_f) <= 90 and abs(lon_f) <= 180):
+            raise ValueError("Coordinates out of valid range")
+    except Exception:
+        # Logga ma NON blocca e NON salva
+        logging.warning(f"Coordinate non valide ricevute da device {device}: lat={lat}, lon={lon}")
+        return jsonify({"status": "ignored"}), 200
+
+    # Se i valori sono validi, salva
     positions = load_positions()
     positions.setdefault(device, [])
-    positions[device].append({"lat": lat, "lon": lon, "timestamp": timestamp})
+    positions[device].append({"lat": lat_f, "lon": lon_f, "timestamp": timestamp})
     save_positions(positions)
 
     return jsonify({"status": "ok"}), 200
+
 
 @app.route("/get_positions", methods=["GET"])
 def get_positions():
@@ -73,5 +89,6 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
+
 
 
