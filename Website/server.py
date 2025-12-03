@@ -19,7 +19,7 @@ if not API_KEY:
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["50 per 10 minutes"]  # Limite globale
+    default_limits=["50 per 10 minutes"]
 )
 
 def load_positions():
@@ -31,6 +31,17 @@ def load_positions():
 def save_positions(data):
     with open(POSITIONS_FILE, "w") as f:
         json.dump(data, f, indent=2)
+
+def is_valid_coordinate(value):
+    """
+    Verifica che la coordinata possa essere convertita in float.
+    Non la converte, perché dobbiamo salvare come stringa.
+    """
+    try:
+        float(value)
+        return True
+    except (ValueError, TypeError):
+        return False
 
 @app.route("/update_position", methods=["POST"])
 @limiter.limit("20 per minute")
@@ -48,31 +59,23 @@ def update_position():
     lon = data.get("lon")
     timestamp = data.get("timestamp")
 
-    # Controllo campi base
-    if device is None or timestamp is None:
+    if device is None or lat is None or lon is None or timestamp is None:
         return jsonify({"error": "Missing fields"}), 400
 
-    # Validazione lat/lon (senza la quale l'app crashava)
-    try:
-        lat_f = float(lat)
-        lon_f = float(lon)
+    # Validazione formattazione lat/lon
+    if not is_valid_coordinate(lat) or not is_valid_coordinate(lon):
+        return jsonify({"error": "Invalid coordinate format"}), 400
 
-        # Scarta NaN o infinito
-        if not (abs(lat_f) <= 90 and abs(lon_f) <= 180):
-            raise ValueError("Coordinates out of valid range")
-    except Exception:
-        # Logga ma NON blocca e NON salva
-        logging.warning(f"Coordinate non valide ricevute da device {device}: lat={lat}, lon={lon}")
-        return jsonify({"status": "ignored"}), 200
-
-    # Se i valori sono validi, salva
     positions = load_positions()
     positions.setdefault(device, [])
-    positions[device].append({"lat": lat_f, "lon": lon_f, "timestamp": timestamp})
+    positions[device].append({
+        "lat": lat,  
+        "lon": lon,
+        "timestamp": timestamp
+    })
     save_positions(positions)
 
     return jsonify({"status": "ok"}), 200
-
 
 @app.route("/get_positions", methods=["GET"])
 def get_positions():
@@ -88,7 +91,4 @@ def index():
     return render_template("index.html"), 200
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
-
-
-
+    app.run(debug=False, host='0.0.0.0', port=5000)
