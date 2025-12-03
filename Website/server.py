@@ -33,10 +33,10 @@ def save_positions(data):
         json.dump(data, f, indent=2)
 
 def is_valid_coordinate(value):
-    """
+    '''
     Verifica che la coordinata possa essere convertita in float.
-    Non la converte, perché dobbiamo salvare come stringa.
-    """
+    Non le converte, perché dobbiamo salvarle come stringa.
+    '''
     try:
         float(value)
         return True
@@ -92,3 +92,4 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=5000)
+
