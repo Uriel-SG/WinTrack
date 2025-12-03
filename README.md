@@ -144,6 +144,10 @@ In order to monitor multiple PCs from different networks (e.g., outside your loc
 
 ## Security Features
 
+### JSON format
+Only POST requests that strictly follow the defined JSON format are accepted. 
+Any other request type or malformed payload is automatically rejected to ensure data integrity and prevent misuse.
+
 ### API Key Authentication
 All position updates sent to the server *must include a valid API key in the* `X-API-Key` HTTP header.
 
