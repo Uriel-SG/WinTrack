@@ -161,16 +161,17 @@ In order to monitor multiple PCs from different networks (e.g., outside your loc
 4. Now you can view all devices in real-time through the public link, while the server running on your PC collects and stores the location data.
 
 ### B. Solutions for Corporate Production Environments
-**WARNING: Tunneling services like Pinggy or Ngrok are strictly not recommended for production, mission-critical, or security-sensitive corporate deployments. They introduce external dependencies, performance bottlenecks, and security uncertainties.**
+⚠️ **WARNING: Tunneling services like Pinggy or Ngrok are strictly not recommended for production, mission-critical, or security-sensitive corporate deployments. They introduce external dependencies, performance bottlenecks, and security uncertainties.** ⚠️
 
 **1. Dedicated Web Server (Gunicorn, Waitress, etc.)**
-For reliable, secure, and scalable distribution within a company, the following professional setup you should use a **dedicated Web Server** (*Gunicorn*, *Waitress*, etc.)
 
-Flask's built-in server is only for development (debug=True). In a production environment, you must deploy the application using a robust Web Server Gateway Interface (**WSGI**) server.
+For reliable, secure, and scalable distribution within a company, you should use a **dedicated Web Server** (*Gunicorn*, *Waitress*, etc.)
+
+Flask's built-in server is **only for development** (debug=True). In a production environment, you must deploy the application using a robust Web Server Gateway Interface (**WSGI**) server.
 
 Example: *Waitress*
 
-Waitress is a production-quality, pure Python WSGI server known for its simplicity and reliability also on Windows environments.
+*Waitress is a production-quality, pure Python WSGI server known for its simplicity and reliability also on Windows environments.*
 
 Instead of running python server.py, you would run the server using Waitress: [Waitress Official](https://flask.palletsprojects.com/en/stable/deploying/waitress/)
 
@@ -178,11 +179,11 @@ Instead of running python server.py, you would run the server using Waitress: [W
 
 To ensure accessibility **without compromising network security**, work with your IT team to configure the corporate firewall and proxy:
 
-- Dedicated Server: Deploy the Waitress-powered Flask server on a dedicated, secured host (e.g., a virtual machine or a physical server).
+- **Dedicated Server:** Deploy the Waitress-powered Flask server on a dedicated, secured host (e.g., a virtual machine or a physical server).
 
-- Firewall Rules: Configure the server's local firewall and the corporate network firewall to explicitly allow incoming traffic only to the port used by Waitress (e.g., 8080) and only from the necessary IP ranges (e.g., the subnets containing the monitored PCs).
+- **Firewall Rules:** Configure the server's local firewall and the corporate network firewall to explicitly allow incoming traffic only to the port used by Waitress (e.g., 8080) and only from the necessary IP ranges (e.g., the subnets containing the monitored PCs).
 
-- Static IP/Domain: Use a stable, internal Static IP or, preferably, an internal DNS record (e.g., wintrack-api.internal.company.com) to ensure the client scripts always point to a reliable location.
+- **Static IP/Domain:** Use a stable, internal Static IP or, preferably, an internal DNS record (e.g., wintrack-api.internal.company.com) to ensure the client scripts always point to a reliable location.
 
 *By following these professional steps, you ensure the integrity, scalability, and security required for an enterprise-level monitoring application.*
 
