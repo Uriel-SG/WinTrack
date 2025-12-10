@@ -103,8 +103,30 @@ setx WINTRACK_API_KEY "$apiKey" /M | Out-Null
 
 Write-Host "[OK] API Key salvata come variabile ambiente di sistema."
 
+
 # -------------------------------
-# 8) Configura l'utilità di pianificazione
+# 8) Richiesta Credenziali e impostazione variabili ambiente
+# -------------------------------
+Write-Host "[*] Configurazione Credenziali..."
+$authUsername = Read-Host "Inserisci il nome utente fornito dall'amministratore"
+$authPassword = Read-Host "Inserisci la password fornita dall'amministratore"
+
+if ([string]::IsNullOrWhiteSpace($authUsername) -or $authPassword.Length -eq 0) {
+    Write-Error "!!! ERRORE: Credenziali non valide."
+    exit 1
+}
+
+Write-Host "[*] Imposto credenziali come variabili d'ambiente di sistema..."
+
+setx WINTRACK_AUTH_USER "$authUsername" /M | Out-Null
+Write-Host "[OK] Nome utente salvato come variabile ambiente di sistema."
+
+setx WINTRACK_AUTH_PASS "$authPassword" /M | Out-Null
+Write-Host "[OK] Password salvata come variabile ambiente di sistema."
+
+
+# -------------------------------
+# 9) Configura l'utilità di pianificazione
 # -------------------------------
 Write-Host "[*] Configurazione Utilità di Pianificazione..."
 
@@ -125,6 +147,7 @@ $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccou
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 $task = New-ScheduledTask -Action $action -Trigger $triggerA,$triggerB -Principal $principal -Settings $settings
 Register-ScheduledTask -TaskName "Wintrack-Cleanup" -InputObject $task
+
 
 # -------------------------------
 # Fine
