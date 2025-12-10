@@ -191,7 +191,7 @@ To ensure accessibility **without compromising network security**, work with you
 
 ## Security Features
 
-### API Key Authentication
+### 1. API Key Authentication
 All position updates sent to the server *must include a valid API key in the* `X-API-Key` HTTP header.
 
 **The server verifies this key before accepting or processing any incoming payload.**
@@ -206,7 +206,7 @@ API keys can be rotated or revoked at any time without modifying the agent code.
 
 The API key is stored as a system environment variable (`WINTRACK_API_KEY`) on the server to avoid embedding secrets in the source code or repository.
 
-### Basic Authentication (Web Interface Protection)
+### 2. Basic Authentication (Web Interface Protection)
 
 Access to the tracking interface (the root URL `/`) and the data retrieval endpoint (`/get_positions`) is secured using HTTP Basic Authentication. 
 This mechanism **requires a *username* and *password* before the user can view the map, the raw data or submit position data via the `/update_position` endpoint.**
@@ -219,11 +219,11 @@ This ensures that:
 
 The credentials (username: WINTRACK_AUTH_USER and password: WINTRACK_AUTH_PASS) are stored as system environment variables on the server.
 
-### JSON format
+### 3. JSON format
 Only POST requests that **strictly follow the defined JSON format** are accepted. 
 Any other request type or malformed payload is automatically rejected to ensure data integrity and prevent misuse.
 
-### Rate Limiting (DoS Protection)
+### 4. Rate Limiting (DoS Protection)
 The server implements request rate limiting on critical endpoints using `Flask-Limiter`.
 
 Rate limiting provides:
