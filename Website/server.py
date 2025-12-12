@@ -96,10 +96,6 @@ def get_positions():
 @app.route("/clear_positions", methods=["POST"])
 @auth.login_required
 def clear_positions():
-    incoming_key = request.headers.get("X-API-Key")
-    if incoming_key != API_KEY:
-        return jsonify({"error": "Invalid API Key"}), 403 
-        
     save_positions({})
     return jsonify({"status": "cleared"}), 200
 
@@ -109,3 +105,4 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
+
