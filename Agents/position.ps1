@@ -1,6 +1,14 @@
+# --------------------------------------------------------------------------
+# WinTrack Client Script (PowerShell)
+# --------------------------------------------------------------------------
+
+# Se connessione https -> TLS 1.2
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+# 1. Caricamento variabili d'ambiente
 $authUsername = $env:WINTRACK_AUTH_USER
 $authPassword = $env:WINTRACK_AUTH_PASS
-$apiKey = $env:WINTRACK_API_KEY
+$apiKey       = $env:WINTRACK_API_KEY
 
 if (-not $authUsername -or -not $authPassword) {
     Write-Error "Variabili d'ambiente WINTRACK_AUTH_USER o WINTRACK_AUTH_PASS non trovate. Impostale."
@@ -11,39 +19,65 @@ if (-not $apiKey) {
     exit 1
 }
 
-$securePassword = ConvertTo-SecureString $authPassword -AsPlainText -Force
-$credential = New-Object System.Management.Automation.PSCredential($authUsername, $securePassword)
+# 2. Header e Auth (Standard Curl-Like)
+$authBytes  = [System.Text.Encoding]::ASCII.GetBytes("${authUsername}:${authPassword}")
+$authBase64 = [Convert]::ToBase64String($authBytes)
 
+$headers = @{
+    "X-API-Key"     = $apiKey
+    "Authorization" = "Basic $authBase64"
+}
+
+# 3. Ottenimento Posizione (Con attesa dinamica per precisione)
 Add-Type -AssemblyName System.Device
 $geo = New-Object System.Device.Location.GeoCoordinateWatcher
 $geo.Start()
-Start-Sleep -Seconds 5
+
+$timeout = 10
+while ($geo.Status -ne 'Ready' -and $timeout -gt 0) {
+    Start-Sleep -Seconds 1
+    $timeout--
+}
+
 $pos = $geo.Position
+$lat = [double]$pos.Location.Latitude
+$lon = [double]$pos.Location.Longitude
+$geo.Stop()
 
-$lat = $pos.Location.Latitude
-$lon = $pos.Location.Longitude
-
-if ([double]::IsNaN($lat) -or [double]::IsNaN($lon) -or $lat -eq 0 -or $lon -eq 0) {
-    Write-Warning "Geolocalizzazione non valida (lat/lon sono 0 o NaN). Uscita."
+# Controllo validità prima di inviare
+if ($pos.Location.IsUnknown -or $lat -eq 0 -or $lon -eq 0) {
+    Write-Warning "Geolocalizzazione non valida. Salto invio."
     exit
 }
 
 $timestamp = (Get-Date).ToString("dd-MM-yyyy HH:mm")
 
+# 4. Body JSON
 $body = @{
-    device = $env:COMPUTERNAME
-    lat = $lat
-    lon = $lon
+    device    = $env:COMPUTERNAME
+    lat       = $lat
+    lon       = $lon
     timestamp = $timestamp
 } | ConvertTo-Json
 
-Invoke-RestMethod `
-    -Uri "<YOUR-URL-HERE>/update_position" `
-    -Method POST `
-    -Body $body `
-    -ContentType "application/json" `
-    -Headers @{ "X-API-Key" = $apiKey } `
-    -Credential $credential `
-    -TimeoutSec 10
+# 5. Invio con BYPASS PROXY e Basic Parsing
+try {
+    $response = Invoke-WebRequest `
+        -Uri "<YOUR-URL-HERE>/update_position" `
+        -Method POST `
+        -Body $body `
+        -ContentType "application/json" `
+        -Headers $headers `
+        -TimeoutSec 15 `
+        -Proxy $null `
+        -UseBasicParsing `
+
+    if ($response.StatusCode -eq 200) {
+        Write-Host "Inviato con successo per $($env:COMPUTERNAME) alle $timestamp" -ForegroundColor Green
+    }
+}
+catch {
+    Write-Host "FALLITO: $($_.Exception.Message)" -ForegroundColor Red
+}
 
 exit
