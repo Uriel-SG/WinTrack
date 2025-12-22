@@ -96,8 +96,20 @@ def get_positions():
 @app.route("/clear_positions", methods=["POST"])
 @auth.login_required
 def clear_positions():
-    save_positions({})
-    return jsonify({"status": "cleared"}), 200
+    """Mantiene solo l'ultimo elemento della lista per ogni PC."""
+    positions = load_positions()
+    
+    cleaned_positions = {}
+    for device, entries in positions.items():
+        if isinstance(entries, list) and len(entries) > 0:
+            # Prendi l'ultimo elemento e lo mette in una nuova lista
+            cleaned_positions[device] = [entries[-1]]
+        else:
+            # Se la lista è  vuota, mantienila tale
+            cleaned_positions[device] = []
+            
+    save_positions(cleaned_positions)
+    return jsonify({"status": "cleared_keep_last"}), 200
 
 @app.route("/")
 def index():
@@ -105,4 +117,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
-
