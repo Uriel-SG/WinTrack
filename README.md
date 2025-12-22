@@ -89,7 +89,7 @@
     powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "iex (Invoke-WebRequest 'https://raw.githubusercontent.com/Uriel-SG/WinTrack/main/agent_installer.ps1' -UseBasicParsing).Content"
     ```
 
-3. Set the correct URL for the `Invoke-RestMethod` of `position.ps1`, the chosen `API Key` and the chosen `credentials` when prompted.
+3. Set the correct `URL` for the `Invoke-RestMethod` of `position.ps1`, the chosen `API Key` and the chosen `credentials` when prompted.
 
 ---
 
